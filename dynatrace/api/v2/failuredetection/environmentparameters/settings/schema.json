@@ -1,0 +1,578 @@
+{
+    "dynatrace": "1",
+    "schemaId": "builtin:failure-detection.environment.parameters",
+    "displayName": "Failure detection parameters",
+    "description": "Failure detection parameters that determine whether a service call is considered successful or failed. Use [failure detection rules](/ui/settings/builtin:failure-detection.environment.rules) to configure which services these parameters apply to.",
+    "documentation": "",
+    "schemaGroups": [
+      "group:service-monitoring",
+      "group:failure-detection"
+    ],
+    "version": "1.0.3",
+    "multiObject": true,
+    "ordered": false,
+    "maxObjects": 10000,
+    "allowedScopes": [
+      "environment"
+    ],
+    "enums": {},
+    "types": {
+      "compareOperation": {
+        "version": "0",
+        "versionInfo": "",
+        "displayName": "compareOperation",
+        "summaryPattern": "",
+        "description": "",
+        "documentation": "",
+        "properties": {
+          "compareOperationType": {
+            "displayName": "Apply this comparison",
+            "description": "",
+            "documentation": "",
+            "type": "text",
+            "subType": "datasource",
+            "datasource": {
+              "identifier": "compare_operation_source",
+              "filterProperties": [
+                "../requestAttribute"
+              ],
+              "resetValue": "NEVER",
+              "validate": true,
+              "fullContext": true,
+              "useApiSearch": false
+            },
+            "nullable": false,
+            "constraints": [
+              {
+                "type": "LENGTH",
+                "maxLength": 500,
+                "minLength": 1
+              }
+            ],
+            "maxObjects": 1,
+            "modificationPolicy": "DEFAULT",
+            "default": "STRING_EXISTS"
+          },
+          "textValue": {
+            "displayName": "Value",
+            "description": "",
+            "documentation": "",
+            "type": "text",
+            "nullable": false,
+            "constraints": [
+              {
+                "type": "LENGTH",
+                "maxLength": 500,
+                "minLength": 1
+              }
+            ],
+            "precondition": {
+              "type": "IN",
+              "property": "compareOperationType",
+              "expectedValues": [
+                "STRING_EQUALS",
+                "NOT_STRING_EQUALS",
+                "STARTS_WITH",
+                "NOT_STARTS_WITH",
+                "CONTAINS",
+                "NOT_CONTAINS",
+                "ENDS_WITH",
+                "NOT_ENDS_WITH"
+              ]
+            },
+            "maxObjects": 1,
+            "modificationPolicy": "DEFAULT",
+            "default": ""
+          },
+          "caseSensitive": {
+            "displayName": "Case sensitive",
+            "description": "",
+            "documentation": "",
+            "type": "boolean",
+            "nullable": false,
+            "precondition": {
+              "type": "IN",
+              "property": "compareOperationType",
+              "expectedValues": [
+                "STRING_EQUALS",
+                "NOT_STRING_EQUALS",
+                "STARTS_WITH",
+                "NOT_STARTS_WITH",
+                "CONTAINS",
+                "NOT_CONTAINS",
+                "ENDS_WITH",
+                "NOT_ENDS_WITH"
+              ]
+            },
+            "maxObjects": 1,
+            "modificationPolicy": "DEFAULT",
+            "default": false
+          },
+          "intValue": {
+            "displayName": "Value",
+            "description": "",
+            "documentation": "",
+            "type": "integer",
+            "nullable": false,
+            "precondition": {
+              "type": "IN",
+              "property": "compareOperationType",
+              "expectedValues": [
+                "INTEGER_EQUALS",
+                "NOT_INTEGER_EQUALS",
+                "INTEGER_GREATER_THAN",
+                "INTEGER_GREATER_THAN_OR_EQUALS",
+                "INTEGER_LESS_THAN",
+                "INTEGER_LESS_THAN_OR_EQUALS"
+              ]
+            },
+            "maxObjects": 1,
+            "modificationPolicy": "DEFAULT",
+            "default": 0
+          },
+          "doubleValue": {
+            "displayName": "Value",
+            "description": "",
+            "documentation": "",
+            "type": "float",
+            "nullable": false,
+            "precondition": {
+              "type": "IN",
+              "property": "compareOperationType",
+              "expectedValues": [
+                "DOUBLE_EQUALS",
+                "NOT_DOUBLE_EQUALS",
+                "DOUBLE_GREATER_THAN",
+                "DOUBLE_GREATER_THAN_OR_EQUALS",
+                "DOUBLE_LESS_THAN",
+                "DOUBLE_LESS_THAN_OR_EQUALS"
+              ]
+            },
+            "maxObjects": 1,
+            "modificationPolicy": "DEFAULT",
+            "default": 0
+          }
+        },
+        "type": "object"
+      },
+      "customErrorRule": {
+        "version": "0",
+        "versionInfo": "",
+        "displayName": "customErrorRule",
+        "summaryPattern": "**{requestAttribute}** {condition.compareOperationType|toLowerCase} {condition.textValue|valueSet, select, true{\"{condition.textValue}\"} other{}}{condition.intValue}{condition.doubleValue}",
+        "description": "",
+        "documentation": "",
+        "properties": {
+          "requestAttribute": {
+            "displayName": "Request attribute",
+            "description": "",
+            "documentation": "",
+            "type": "text",
+            "subType": "datasource",
+            "datasource": {
+              "identifier": "request_attribute_source",
+              "filterProperties": [],
+              "resetValue": "NEVER",
+              "validate": false,
+              "fullContext": false,
+              "useApiSearch": true
+            },
+            "nullable": false,
+            "constraints": [
+              {
+                "type": "PATTERN",
+                "customMessage": "Invalid UUID",
+                "pattern": "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-5][0-9a-fA-F]{3}\\-[089abAB][0-9a-fA-F]{3}\\-[0-9a-fA-F]{12}$"
+              },
+              {
+                "type": "LENGTH",
+                "maxLength": 500,
+                "minLength": 1
+              }
+            ],
+            "maxObjects": 1,
+            "modificationPolicy": "DEFAULT",
+            "default": ""
+          },
+          "condition": {
+            "displayName": "Request attribute condition",
+            "description": "",
+            "documentation": "",
+            "type": {
+              "$ref": "#/types/compareOperation"
+            },
+            "nullable": false,
+            "maxObjects": 1,
+            "modificationPolicy": "DEFAULT"
+          }
+        },
+        "type": "object"
+      },
+      "exception": {
+        "version": "0",
+        "versionInfo": "",
+        "displayName": "exception",
+        "summaryPattern": "{classPattern|valueSet, select, true {{messagePattern|valueSet, select, true {**{classPattern}** where message contains \"**{messagePattern}**\"} other {**{classPattern}**}}} other {{messagePattern|valueSet, select, true {Any exception where message contains \"**{messagePattern}**\"} other {Any exception}}}}",
+        "description": "",
+        "documentation": "",
+        "properties": {
+          "classPattern": {
+            "displayName": "Class pattern",
+            "description": "The pattern will match if it is contained within the actual class name.",
+            "documentation": "",
+            "type": "text",
+            "nullable": true,
+            "constraints": [
+              {
+                "type": "LENGTH",
+                "maxLength": 500,
+                "minLength": 1
+              }
+            ],
+            "maxObjects": 1,
+            "modificationPolicy": "DEFAULT"
+          },
+          "messagePattern": {
+            "displayName": "Exception message pattern",
+            "description": "Optionally, define an exception message pattern. The pattern will match if the actual exception message contains the pattern.",
+            "documentation": "",
+            "type": "text",
+            "nullable": true,
+            "constraints": [
+              {
+                "type": "LENGTH",
+                "maxLength": 500,
+                "minLength": 1
+              }
+            ],
+            "maxObjects": 1,
+            "modificationPolicy": "DEFAULT"
+          }
+        },
+        "type": "object"
+      },
+      "exceptionRules": {
+        "version": "0",
+        "versionInfo": "",
+        "displayName": "exceptionRules",
+        "summaryPattern": "",
+        "description": "",
+        "documentation": "",
+        "properties": {
+          "ignoreAllExceptions": {
+            "displayName": "Ignore all exceptions",
+            "description": "",
+            "documentation": "",
+            "type": "boolean",
+            "nullable": false,
+            "maxObjects": 1,
+            "modificationPolicy": "DEFAULT",
+            "default": false
+          },
+          "successForcingExceptions": {
+            "displayName": "Success forcing exceptions",
+            "description": "Define exceptions which indicate that a service call should not be considered as failed. E.g. an exception indicating that the client aborted the operation.",
+            "documentation": "If an exception matching any of the defined patterns occurs on the entry node of the service, it will be considered successful. Compared to ignored exceptions, the request will be considered successful even if other exceptions occur in the same request.",
+            "type": "set",
+            "items": {
+              "displayName": "",
+              "description": "",
+              "documentation": "",
+              "type": {
+                "$ref": "#/types/exception"
+              }
+            },
+            "nullable": false,
+            "precondition": {
+              "type": "EQUALS",
+              "property": "ignoreAllExceptions",
+              "expectedValue": false
+            },
+            "metadata": {
+              "addItemButton": "Add exception"
+            },
+            "minObjects": 0,
+            "maxObjects": 200,
+            "modificationPolicy": "DEFAULT"
+          },
+          "ignoredExceptions": {
+            "displayName": "Ignored Exceptions",
+            "description": "Some exceptions that are thrown by legacy or 3rd-party code indicate a specific response, not an error. Use this setting to instruct Dynatrace to treat such exceptions as non-failed requests.",
+            "documentation": "If an exception matching any of the defined patterns occurs in a request, it will not be considered as a failure. Other exceptions occurring at the same request might still mark the request as failed.",
+            "type": "set",
+            "items": {
+              "displayName": "",
+              "description": "",
+              "documentation": "",
+              "type": {
+                "$ref": "#/types/exception"
+              }
+            },
+            "nullable": false,
+            "precondition": {
+              "type": "EQUALS",
+              "property": "ignoreAllExceptions",
+              "expectedValue": false
+            },
+            "metadata": {
+              "addItemButton": "Add exception"
+            },
+            "minObjects": 0,
+            "maxObjects": 200,
+            "modificationPolicy": "DEFAULT"
+          },
+          "customHandledExceptions": {
+            "displayName": "Custom handled exceptions",
+            "description": "There may be situations where your application code handles exceptions gracefully in a manner that these failures aren't detected by Dynatrace. Use this setting to define specific gracefully-handled exceptions that should be treated as service failures.",
+            "documentation": "",
+            "type": "set",
+            "items": {
+              "displayName": "",
+              "description": "",
+              "documentation": "",
+              "type": {
+                "$ref": "#/types/exception"
+              }
+            },
+            "nullable": false,
+            "precondition": {
+              "type": "EQUALS",
+              "property": "ignoreAllExceptions",
+              "expectedValue": false
+            },
+            "metadata": {
+              "addItemButton": "Add exception"
+            },
+            "minObjects": 0,
+            "maxObjects": 200,
+            "modificationPolicy": "DEFAULT"
+          },
+          "customErrorRules": {
+            "displayName": "Custom error rules",
+            "description": "Some custom error situations are only detectable via a return value or other means. To support such cases, [define a request attribute](https://dt-url.net/ys5k0p4y) that captures the required data. Then define a custom error rule that determines if the request has failed based on the value of the request attribute.",
+            "documentation": "",
+            "type": "set",
+            "items": {
+              "displayName": "",
+              "description": "",
+              "documentation": "",
+              "type": {
+                "$ref": "#/types/customErrorRule"
+              }
+            },
+            "nullable": false,
+            "metadata": {
+              "addItemButton": "Add custom error rule"
+            },
+            "minObjects": 0,
+            "maxObjects": 250,
+            "modificationPolicy": "DEFAULT"
+          },
+          "ignoreSpanFailureDetection": {
+            "displayName": "Ignore span failure detection",
+            "description": "",
+            "documentation": "",
+            "type": "boolean",
+            "nullable": false,
+            "maxObjects": 1,
+            "modificationPolicy": "DEFAULT",
+            "default": false
+          }
+        },
+        "type": "object"
+      },
+      "brokenLinks": {
+        "version": "0",
+        "versionInfo": "",
+        "displayName": "brokenLinks",
+        "summaryPattern": "",
+        "description": "",
+        "documentation": "",
+        "properties": {
+          "http404NotFoundFailures": {
+            "displayName": "Consider 404 HTTP response codes as failures",
+            "description": "",
+            "documentation": "",
+            "type": "boolean",
+            "nullable": false,
+            "maxObjects": 1,
+            "modificationPolicy": "DEFAULT",
+            "default": false
+          },
+          "brokenLinkDomains": {
+            "displayName": "Rules for broken links to related domains",
+            "description": "If your application relies on other hosts at other domains, add the associated domain names here. Once configured, Dynatrace will consider 404s thrown by hosts at these domains to be service failures related to your application.",
+            "documentation": "",
+            "type": "set",
+            "items": {
+              "displayName": "Domain",
+              "description": "",
+              "documentation": "",
+              "type": "text",
+              "constraints": [
+                {
+                  "type": "LENGTH",
+                  "maxLength": 500,
+                  "minLength": 1
+                }
+              ],
+              "metadata": {
+                "placeholder": "For example, www.otherdomain.com"
+              }
+            },
+            "nullable": false,
+            "precondition": {
+              "type": "EQUALS",
+              "property": "http404NotFoundFailures",
+              "expectedValue": true
+            },
+            "metadata": {
+              "addItemButton": "Add other application domain"
+            },
+            "minObjects": 0,
+            "maxObjects": 100,
+            "modificationPolicy": "DEFAULT"
+          }
+        },
+        "type": "object"
+      },
+      "httpResponseCodes": {
+        "version": "0",
+        "versionInfo": "",
+        "displayName": "httpResponseCodes",
+        "summaryPattern": "",
+        "description": "",
+        "documentation": "",
+        "properties": {
+          "serverSideErrors": {
+            "displayName": "HTTP response codes which indicate an error on the server side",
+            "description": "",
+            "documentation": "",
+            "type": "text",
+            "nullable": false,
+            "constraints": [
+              {
+                "type": "LENGTH"
+              }
+            ],
+            "metadata": {
+              "placeholder": "For example, 500-599, 402, 405-499"
+            },
+            "maxObjects": 1,
+            "modificationPolicy": "DEFAULT",
+            "default": "500-599"
+          },
+          "failOnMissingResponseCodeServerSide": {
+            "displayName": "Treat missing HTTP response code as server side errors",
+            "description": "",
+            "documentation": "",
+            "type": "boolean",
+            "nullable": false,
+            "maxObjects": 1,
+            "modificationPolicy": "DEFAULT",
+            "default": false
+          },
+          "clientSideErrors": {
+            "displayName": "HTTP response codes which indicate client side errors",
+            "description": "",
+            "documentation": "",
+            "type": "text",
+            "nullable": false,
+            "constraints": [
+              {
+                "type": "LENGTH"
+              }
+            ],
+            "metadata": {
+              "placeholder": "For example, 400-499, 503, 510-599"
+            },
+            "maxObjects": 1,
+            "modificationPolicy": "DEFAULT",
+            "default": "400-599"
+          },
+          "failOnMissingResponseCodeClientSide": {
+            "displayName": "Treat missing HTTP response code as client side error",
+            "description": "",
+            "documentation": "",
+            "type": "boolean",
+            "nullable": false,
+            "maxObjects": 1,
+            "modificationPolicy": "DEFAULT",
+            "default": false
+          }
+        },
+        "type": "object"
+      }
+    },
+    "properties": {
+      "name": {
+        "displayName": "Name",
+        "description": "",
+        "documentation": "",
+        "type": "text",
+        "nullable": false,
+        "constraints": [
+          {
+            "type": "LENGTH",
+            "maxLength": 150,
+            "minLength": 1
+          }
+        ],
+        "maxObjects": 1,
+        "modificationPolicy": "DEFAULT",
+        "default": ""
+      },
+      "description": {
+        "displayName": "Description",
+        "description": "",
+        "documentation": "",
+        "type": "text",
+        "nullable": true,
+        "constraints": [
+          {
+            "type": "LENGTH",
+            "maxLength": 1000,
+            "minLength": 1
+          }
+        ],
+        "maxObjects": 1,
+        "modificationPolicy": "DEFAULT"
+      },
+      "httpResponseCodes": {
+        "displayName": "HTTP response codes",
+        "description": "",
+        "documentation": "",
+        "type": {
+          "$ref": "#/types/httpResponseCodes"
+        },
+        "nullable": false,
+        "maxObjects": 1,
+        "modificationPolicy": "DEFAULT"
+      },
+      "brokenLinks": {
+        "displayName": "HTTP 404 (broken links)",
+        "description": "HTTP 404 response codes are thrown when a web server can't find a certain page. 404s are classified as broken links on the client side and therefore aren't considered to be service failures. By enabling this setting, you can have 404s treated as server-side service failures.",
+        "documentation": "",
+        "type": {
+          "$ref": "#/types/brokenLinks"
+        },
+        "nullable": false,
+        "maxObjects": 1,
+        "modificationPolicy": "DEFAULT"
+      },
+      "exceptionRules": {
+        "displayName": "Customize failure detection for specific exceptions and errors",
+        "description": "",
+        "documentation": "",
+        "type": {
+          "$ref": "#/types/exceptionRules"
+        },
+        "nullable": false,
+        "maxObjects": 1,
+        "modificationPolicy": "DEFAULT"
+      }
+    },
+    "metadata": {
+      "addItemButton": "Add failure detection parameters"
+    }
+  }

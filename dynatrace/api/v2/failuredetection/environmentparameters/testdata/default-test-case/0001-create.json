@@ -1,0 +1,30 @@
+{
+    "name": "test_omit_404s",
+    "description": "Stupid rule avoiding detecting 404 errors as failure",
+    "httpResponseCodes": {
+        "serverSideErrors": "500-599",
+        "failOnMissingResponseCodeServerSide": true,
+        "clientSideErrors": "400-403, 405-498",
+        "failOnMissingResponseCodeClientSide": true
+    },
+    "brokenLinks": {
+        "http404NotFoundFailures": true,
+        "brokenLinkDomains": [
+            "example123.com"
+        ]
+    },
+    "exceptionRules": {
+        "ignoreAllExceptions": true,
+        "customErrorRules": [
+            {
+                "requestAttribute": "4effb29c-f14f-49b0-bf48-8a89502150ba",
+                "condition": {
+                    "compareOperationType": "NOT_CONTAINS",
+                    "textValue": "foo",
+                    "caseSensitive": true
+                }
+            }
+        ],
+        "ignoreSpanFailureDetection": true
+    }
+}
