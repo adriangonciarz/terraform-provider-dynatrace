@@ -12,15 +12,15 @@ type CustomErrorRule struct {
 
 func (me CustomErrorRule) Schema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-		"request_attributes": {
+		"request_attribute": {
 			Type:        schema.TypeString,
 			Required:    true,
-			Description: "",
+			Description: "ID of request attribute to apply custom error rule",
 		},
 		"condition": {
 			Type:        schema.TypeList,
 			Required:    true,
-			Description: "",
+			Description: "Definition of the rule condition",
 		},
 	}
 }

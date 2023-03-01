@@ -16,17 +16,17 @@ func (me CustomErrorRuleCondition) Schema() map[string]*schema.Schema {
 		"compare_operation_type": {
 			Type:        schema.TypeString,
 			Required:    true,
-			Description: "",
+			Description: "Type of comparison operation",
 		},
 		"text_value": {
 			Type:        schema.TypeString,
 			Required:    true,
-			Description: "",
+			Description: "Value to compare to",
 		},
 		"case_sensitive": {
 			Type:        schema.TypeBool,
 			Required:    true,
-			Description: "",
+			Description: "Should the value comparison be case-sensitive",
 		},
 	}
 }
