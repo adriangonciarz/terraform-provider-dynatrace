@@ -17,7 +17,7 @@ func (me *HTTPResponseCodes) Schema() map[string]*schema.Schema {
 		"server_side_errors": {
 			Type:        schema.TypeString,
 			Required:    true,
-			Description: "HTTP response codes which indicate an error on the server side",
+			Description: "HTTP response codes which indicate an error on the server side, as number, range or multiple values. Eg. '500', '500-502', '500, 503-504'",
 		},
 		"fail_on_missing_response_code_server_side": {
 			Type:        schema.TypeBool,
@@ -27,7 +27,7 @@ func (me *HTTPResponseCodes) Schema() map[string]*schema.Schema {
 		"client_side_errors": {
 			Type:        schema.TypeString,
 			Required:    true,
-			Description: "HTTP response codes which indicate an error on the client side",
+			Description: "HTTP response codes which indicate an error on the client side, as number, range or multiple values. Eg. '400', '400-402', '400, 403-404'",
 		},
 		"fail_on_missing_response_code_client_side": {
 			Type:        schema.TypeBool,

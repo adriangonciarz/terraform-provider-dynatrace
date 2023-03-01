@@ -15,96 +15,65 @@ type FailureDetectionEnvironmentParameter struct {
 
 func (me *FailureDetectionEnvironmentParameter) Schema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-		"metrics": {
+		"name": {
+			Type:        schema.TypeString,
+			Optional:    false,
+			Description: "Name of failure detection parameter",
+		},
+		"description": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Description of failure detection parameter",
+		},
+		"http_response_codes": {
 			Type:        schema.TypeList,
 			Optional:    true,
 			MinItems:    1,
 			MaxItems:    1,
-			Description: "DDU pool settings for Metrics",
+			Description: "Defines which HTTP response codes should be treated as server/client side errors",
 			Elem: &schema.Resource{
-				Schema: new(DDUPoolConfig).Schema(),
+				Schema: new(HTTPResponseCodes).Schema(),
 			},
 		},
-		"log_monitoring": {
+		"broken_links": {
 			Type:        schema.TypeList,
 			Optional:    true,
 			MinItems:    1,
 			MaxItems:    1,
-			Description: "DDU pool settings for Log Monitoring",
+			Description: "Makes requests resulting in 404 HTTP Response Code treated as server-side service failures",
 			Elem: &schema.Resource{
-				Schema: new(DDUPoolConfig).Schema(),
+				Schema: new(BrokenLinks).Schema(),
 			},
 		},
-		"serverless": {
+		"exception_rules": {
 			Type:        schema.TypeList,
 			Optional:    true,
 			MinItems:    1,
 			MaxItems:    1,
-			Description: "DDU pool settings for Serverless",
+			Description: "Customize failure detection for specific exceptions and errors",
 			Elem: &schema.Resource{
-				Schema: new(DDUPoolConfig).Schema(),
-			},
-		},
-		"events": {
-			Type:        schema.TypeList,
-			Optional:    true,
-			MinItems:    1,
-			MaxItems:    1,
-			Description: "DDU pool settings for Events",
-			Elem: &schema.Resource{
-				Schema: new(DDUPoolConfig).Schema(),
-			},
-		},
-		"traces": {
-			Type:        schema.TypeList,
-			Optional:    true,
-			MinItems:    1,
-			MaxItems:    1,
-			Description: "DDU pool settings for Traces",
-			Elem: &schema.Resource{
-				Schema: new(DDUPoolConfig).Schema(),
+				Schema: new(ExceptionRules).Schema(),
 			},
 		},
 	}
 }
 
-func (me *DDUPool) MarshalHCL(properties hcl.Properties) error {
-
-	if me.MetricsPool.LimitEnabled {
-		if err := properties.Encode("metrics", &me.MetricsPool); err != nil {
-			return err
-		}
-	}
-	if me.LogMonitoringPool.LimitEnabled {
-		if err := properties.Encode("log_monitoring", &me.LogMonitoringPool); err != nil {
-			return err
-		}
-	}
-	if me.ServerlessPool.LimitEnabled {
-		if err := properties.Encode("serverless", &me.ServerlessPool); err != nil {
-			return err
-		}
-	}
-	if me.EventsPool.LimitEnabled {
-		if err := properties.Encode("events", &me.EventsPool); err != nil {
-			return err
-		}
-	}
-	if me.TracesPool.LimitEnabled {
-		if err := properties.Encode("traces", &me.TracesPool); err != nil {
-			return err
-		}
-	}
-
-	return nil
+func (me *FailureDetectionEnvironmentParameter) MarshalHCL(properties hcl.Properties) error {
+	return properties.EncodeAll(map[string]any{
+		"name":                &me.Name,
+		"description":         &me.Description,
+		"http_response_codes": &me.HTTPResponseCodes,
+		"broken_links":        &me.BrokenLinks,
+		"exception_rules":     &me.ExceptionRules,
+	})
 }
 
-func (me *DDUPool) UnmarshalHCL(decoder hcl.Decoder) error {
+func (me *FailureDetectionEnvironmentParameter) UnmarshalHCL(decoder hcl.Decoder) error {
 	return decoder.DecodeAll(map[string]interface{}{
-		"metrics":        &me.MetricsPool,
-		"log_monitoring": &me.LogMonitoringPool,
-		"serverless":     &me.ServerlessPool,
-		"events":         &me.EventsPool,
-		"traces":         &me.TracesPool,
+		"name":                &me.Name,
+		"description":         &me.Description,
+		"http_response_codes": &me.HTTPResponseCodes,
+		"broken_links":        &me.BrokenLinks,
+		"exception_rules":     &me.ExceptionRules,
 	})
 }
