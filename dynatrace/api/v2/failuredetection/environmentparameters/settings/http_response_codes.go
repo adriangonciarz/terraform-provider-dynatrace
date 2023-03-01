@@ -1,8 +1,3 @@
-// "serverSideErrors": "500-599",
-// "failOnMissingResponseCodeServerSide": true,
-// "clientSideErrors": "400-403, 405-498",
-// "failOnMissingResponseCodeClientSide": true
-
 package environmentparameter
 
 import (
@@ -44,14 +39,18 @@ func (me *HTTPResponseCodes) Schema() map[string]*schema.Schema {
 
 func (me *HTTPResponseCodes) MarshalHCL(properties hcl.Properties) error {
 	return properties.EncodeAll(map[string]interface{}{
-		"server_side_errors": me.ServerSideErrors,
-		"broken_links":       me.BrokenLinkDomains,
+		"server_side_errors":                        me.ServerSideErrors,
+		"fail_on_missing_response_code_server_side": me.FailOnMissingReponseCodeServerSide,
+		"client_side_errors":                        me.ClientSideErrors,
+		"fail_on_missing_response_code_client_side": me.FailOnMissingReponseCodeClientSide,
 	})
 }
 
 func (me *HTTPResponseCodes) UnmarshalHCL(decoder hcl.Decoder) error {
 	return decoder.DecodeAll(map[string]interface{}{
-		"http_not_found_failures": me.HTTPNotFoundFailures,
-		"broken_links":            me.BrokenLinkDomains,
+		"server_side_errors":                        me.ServerSideErrors,
+		"fail_on_missing_response_code_server_side": me.FailOnMissingReponseCodeServerSide,
+		"client_side_errors":                        me.ClientSideErrors,
+		"fail_on_missing_response_code_client_side": me.FailOnMissingReponseCodeClientSide,
 	})
 }
