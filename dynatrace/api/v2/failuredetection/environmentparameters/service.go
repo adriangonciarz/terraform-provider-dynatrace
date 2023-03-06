@@ -1,6 +1,6 @@
 /**
 * @license
-* Copyright 2020 Dynatrace LLC
+* Copyright 2023 Dynatrace LLC
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 package environmentparameter
 
 import (
-	ddupool "github.com/dynatrace-oss/terraform-provider-dynatrace/dynatrace/api/v2/ddupool/settings"
+	failure_parameter "github.com/dynatrace-oss/terraform-provider-dynatrace/dynatrace/api/v2/failuredetection/environmentparameters/settings"
 	"github.com/dynatrace-oss/terraform-provider-dynatrace/dynatrace/settings"
 	"github.com/dynatrace-oss/terraform-provider-dynatrace/dynatrace/settings/services/settings20"
 )
@@ -26,6 +26,6 @@ import (
 const SchemaVersion = "1.0.3"
 const SchemaID = "builtin:failure-detection.environment.parameters"
 
-func Service(credentials *settings.Credentials) settings.CRUDService[*ddupool.DDUPool] {
-	return settings20.Service[*ddupool.DDUPool](credentials, SchemaID, SchemaVersion)
+func Service(credentials *settings.Credentials) settings.CRUDService[*failure_parameter.FailureDetectionEnvironmentParameter] {
+	return settings20.Service[*failure_parameter.FailureDetectionEnvironmentParameter](credentials, SchemaID, SchemaVersion)
 }
