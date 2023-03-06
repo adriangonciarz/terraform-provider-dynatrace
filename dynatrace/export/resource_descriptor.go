@@ -90,6 +90,7 @@ import (
 	service_anomalies_v2 "github.com/dynatrace-oss/terraform-provider-dynatrace/dynatrace/api/v2/anomalies/services"
 	"github.com/dynatrace-oss/terraform-provider-dynatrace/dynatrace/api/v2/availability/processgroupalerting"
 	ddupool "github.com/dynatrace-oss/terraform-provider-dynatrace/dynatrace/api/v2/ddupool"
+	"github.com/dynatrace-oss/terraform-provider-dynatrace/dynatrace/api/v2/failuredetection/environmentparameters"
 	"github.com/dynatrace-oss/terraform-provider-dynatrace/dynatrace/api/v2/ibmmq/filters"
 	"github.com/dynatrace-oss/terraform-provider-dynatrace/dynatrace/api/v2/ibmmq/imsbridges"
 	"github.com/dynatrace-oss/terraform-provider-dynatrace/dynatrace/api/v2/ibmmq/queuemanagers"
@@ -624,6 +625,7 @@ var AllResources = map[ResourceType]ResourceDescriptor{
 		processvisibility.Service,
 		Coalesce(Dependencies.Host),
 		Coalesce(Dependencies.HostGroup)),
+	ResourceTypes.FailureDetectionEnvironmentParameter: NewResourceDescriptor(environmentparameters.FailureDetectionEnvironmentParameter),
 }
 
 var BlackListedResources = []ResourceType{
