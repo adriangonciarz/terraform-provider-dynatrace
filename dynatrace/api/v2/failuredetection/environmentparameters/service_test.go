@@ -15,7 +15,7 @@
 * limitations under the License.
  */
 
-package environmentparameter
+package environmentparameter_test
 
 import (
 	"testing"

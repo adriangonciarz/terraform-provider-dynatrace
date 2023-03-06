@@ -1,8 +1,8 @@
 data "dynatrace_request_attribute" "myattr" {
-    name = ""
+    name = "customattr"
 }
 
-resource "dynatrace_failure_detection_parameter" "stupid_404" {
+resource "dynatrace_failure_detection_environment_parameter" "stupid_404" {
     name = "#name"
     description = "Stupid rule avoiding detecting 404 errors as failure"
     httpResponseCodes {
@@ -21,8 +21,8 @@ resource "dynatrace_failure_detection_parameter" "stupid_404" {
         ignore_all_exceptions = true
         custom_error_rules = [
             {
-                request_attribute = data.dynatrace_request_attribute.myattr.id,
-                condition {
+                request_attribute = data.dynatrace_request_attribute.myattr.id
+                condition = {
                     compare_operation_type = "NOT_CONTAINS"
                     text_value = "foo"
                     case_sensitive = true
