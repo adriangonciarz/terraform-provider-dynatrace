@@ -625,7 +625,7 @@ var AllResources = map[ResourceType]ResourceDescriptor{
 		processvisibility.Service,
 		Coalesce(Dependencies.Host),
 		Coalesce(Dependencies.HostGroup)),
-	ResourceTypes.FailureDetectionEnvironmentParameter: NewResourceDescriptor(environmentparameters.FailureDetectionEnvironmentParameter),
+	ResourceTypes.FailureDetectionEnvironmentParameter: NewResourceDescriptor(environmentparameters.Service),
 }
 
 var BlackListedResources = []ResourceType{
